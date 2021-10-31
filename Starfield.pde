@@ -108,8 +108,15 @@ void mousePressed() {
     int xLoc = (int)(Math.random()*1001);
     int yLoc = (int)(Math.random()*1001);
     color thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
-    for (int i = 1; i < particle.length; i++){
-      particle[i] = new Particle(xLoc, yLoc, thisColor);
+    if (uniformColors){
+      for (int i = 1; i < particle.length; i++){
+        particle[i] = new Particle(xLoc, yLoc, thisColor);
+      }
+    } else {
+      for (int i = 1; i < particle.length; i++){
+        particle[i] = new Particle(xLoc, yLoc, thisColor);
+        thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+      }
     }
     thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
     particle[0] = new OddballParticle(xLoc, yLoc, thisColor);
