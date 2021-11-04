@@ -6,6 +6,7 @@
 Flower[] flowers = new Flower[11];
 Particle[] particles = new Particle[150];
 
+int fps = 60;
 boolean todrawflowers = true;
 
 int reset = (int)(Math.random()*25+20);
@@ -34,7 +35,7 @@ void setup() {
   }  
   xLoc = (int)(Math.random()*1001);
   yLoc = (int)(Math.random()*1001);
-  //frameRate(30);  
+  frameRate(fps);  
   //strokeWeight(3);
 }
 
@@ -178,6 +179,17 @@ void keyPressed() {
     trail--;
     if (trail < 0)
       trail = 0;
+  } else if (keyCode == 37){
+    fps--;
+    if (fps < 1)
+      fps = 1;
+    frameRate(fps);
+  } else if (keyCode == 39){
+    fps++;
+    if (fps > 300)
+      fps = 300;
+    frameRate(fps);
+    System.out.println(fps);
   }
 }
 
