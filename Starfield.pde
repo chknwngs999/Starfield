@@ -1,12 +1,7 @@
-//toggle colors onclick
-//toggle location?
-//toggle trail?
-//toggle framerate/speed
-
 Flower[] flowers = new Flower[11];
 Particle[] particles = new Particle[150];
 
-int fps = 60;
+int fps = 30;
 boolean todrawflowers = true;
 
 int reset = (int)(Math.random()*25+20);
@@ -186,8 +181,8 @@ void keyPressed() {
     frameRate(fps);
   } else if (keyCode == 39){
     fps++;
-    if (fps > 300)
-      fps = 300;
+    if (fps > 100)
+      fps = 100;
     frameRate(fps);
     System.out.println(fps);
   }
