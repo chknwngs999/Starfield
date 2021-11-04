@@ -1,37 +1,255 @@
 //toggle colors onclick
 //toggle location?
 //toggle trail?
-//toggle framerate
+//toggle framerate/speed
+
+Flower[] flowers = new Flower[11];
+Particle[] particles = new Particle[150];
+
+boolean todrawflowers = true;
+
+int reset = (int)(Math.random()*25+20);
+int resetcheck = 0;
+
+int continualrotate = 0;
+int xLoc = (int)(Math.random()*1001);
+int yLoc = (int)(Math.random()*1001);
+
+color newcolor;
+color backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+boolean uniformcolors = true;
+
+void setup() {  
+  size(1000, 1000);  
+  background(backgroundcolor);  
+  xLoc = (int)(Math.random()*1001);  
+  yLoc = (int)(Math.random()*1001);  
+  double angle = (Math.random()*361);  
+  int sizing = (int)(Math.random()*20)+20;  
+  flowers[0] = new Middle(0, 0, 7, angle);
+  newcolor = color(255, 182, 193);
+  for (int i = 1; i < flowers.length; i++) {
+    flowers[i] = new Flower(10, 10, 3, sizing, angle, newcolor);
+  }  
+  xLoc = (int)(Math.random()*1001);
+  yLoc = (int)(Math.random()*1001);
+  //frameRate(30);  
+  //strokeWeight(3);
+}
+
+void draw() {  
+  fill(backgroundcolor);  
+  rect(0, 0, 1000, 1000);  
+  //background(150);  
+  if (todrawflowers){
+    translate(xLoc, yLoc);  
+    rotate(radians(continualrotate));  
+    for (int i = 0; i < flowers.length; i++) {    
+      flowers[i].show();    
+      flowers[i].move();    
+      rotate(radians(36));
+    }  
+    continualrotate += 10;  
+    xLoc += Math.cos(flowers[0].myAngle)*flowers[0].mySpeed;  
+    yLoc += Math.sin(flowers[0].myAngle)*flowers[0].mySpeed;  
+  } else {
+    for (int i = 0; i < particles.length; i++) {
+      particles[i].move();
+      particles[i].show();
+    }
+  }
+  resetcheck++;  
+  if (resetcheck == reset || (flowers[1].myX >= 1000-xLoc || flowers[1].myX <= xLoc-1000 || flowers[1].myY >= 1000-yLoc || flowers[1].myY <= yLoc-1000)) {    
+    reset = (int)(Math.random()*25+20);    
+    resetcheck = 0;
+    
+    if (todrawflowers){
+      double angle = (Math.random()*361);  
+      int sizing = (int)(Math.random()*20)+20;  
+      flowers[0] = new Middle(0, 0, 7, angle);
+      if (uniformcolors)
+        newcolor = color(255, 182, 193);
+      else
+        newcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+      for (int i = 1; i < flowers.length; i++) {    
+        flowers[i] = new Flower(10, 10, 3, sizing, angle, newcolor);
+      }  
+      xLoc = (int)(Math.random()*1001);  
+      yLoc = (int)(Math.random()*1001);
+    } else {
+      xLoc = (int)(Math.random()*1001);    
+      yLoc = (int)(Math.random()*1001);
+      color thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+      if (uniformcolors) {
+        for (int i = 1; i < particles.length; i++) {
+          particles[i] = new Particle(xLoc, yLoc, thisColor);
+        }
+      } else {
+        for (int i = 1; i < particles.length; i++) {
+          particles[i] = new Particle(xLoc, yLoc, thisColor);
+          thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+        }
+      }
+      thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+      particles[0] = new OddballParticle(xLoc, yLoc, thisColor);
+    }
+  }
+}
+
+void mousePressed() {
+  if (mouseButton == LEFT) {
+    if (todrawflowers){
+      double angle = (Math.random()*361);  
+      int sizing = (int)(Math.random()*20)+20;  
+      flowers[0] = new Middle(0, 0, 7, angle);
+      if (uniformcolors)
+        newcolor = color(255, 182, 193);
+      else
+        newcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+      for (int i = 1; i < flowers.length; i++) {    
+        flowers[i] = new Flower(10, 10, 3, sizing, angle, newcolor);
+      }  
+      xLoc = (int)(Math.random()*1001);  
+      yLoc = (int)(Math.random()*1001);
+    } else {
+      xLoc = (int)(Math.random()*1001);    
+      yLoc = (int)(Math.random()*1001);
+      color thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+      if (uniformcolors) {
+        for (int i = 1; i < particles.length; i++) {
+          particles[i] = new Particle(xLoc, yLoc, thisColor);
+        }
+      } else {
+        for (int i = 1; i < particles.length; i++) {
+          particles[i] = new Particle(xLoc, yLoc, thisColor);
+          thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+        }
+      }
+      thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+      particles[0] = new OddballParticle(xLoc, yLoc, thisColor);
+    }
+  } else if (mouseButton == CENTER) {
+    uniformcolors = !uniformcolors;
+  } else if (mouseButton == RIGHT) {
+    backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+  }
+}
+
+void keyPressed() {
+  if (keyCode == 32) {
+    backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+    todrawflowers = !todrawflowers;
+    if (todrawflowers) {
+      double angle = (Math.random()*361);  
+      int sizing = (int)(Math.random()*20)+20;  
+      flowers[0] = new Middle(0, 0, 7, angle);
+      if (uniformcolors)
+        newcolor = color(255, 182, 193);
+      else
+        newcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+      for (int i = 1; i < flowers.length; i++) {    
+        flowers[i] = new Flower(10, 10, 3, sizing, angle, newcolor);
+      }  
+      xLoc = (int)(Math.random()*1001);  
+      yLoc = (int)(Math.random()*1001);
+    } else {
+      xLoc = (int)(Math.random()*1001);    
+      yLoc = (int)(Math.random()*1001);
+      color thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+      if (uniformcolors) {
+        for (int i = 1; i < particles.length; i++) {
+          particles[i] = new Particle(xLoc, yLoc, thisColor);
+        }
+      } else {
+        for (int i = 1; i < particles.length; i++) {
+          particles[i] = new Particle(xLoc, yLoc, thisColor);
+          thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+        }
+      }
+      thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+      particles[0] = new OddballParticle(xLoc, yLoc, thisColor);
+    }
+  }
+}
+
+class Particle
+{
+  //your code here
+  double myX, myY, myAngle, mySpeed;
+  int mySize;
+  color myColor;
+  Particle() {
+  }
+  Particle (double X, double Y, color COLOR) {
+    myX = X;
+    myY = Y;
+    myColor = COLOR;
+    myAngle = (Math.random()*361);
+    mySpeed = (int)(Math.random()*10+5);
+    mySize = (int)(Math.random()*15+10);
+  }
+
+  void move() {
+    myX += Math.cos(myAngle) * mySpeed;
+    myY += Math.sin(myAngle) * mySpeed;
+  }
+  void show() {
+    fill(myColor);
+    noStroke();
+    ellipse((float)myX, (float)myY, mySize, mySize);
+  }
+}
+
+class OddballParticle extends Particle //inherits from Particle
+{
+  OddballParticle (double X, double Y, color COLOR)
+  {
+    myX = X;
+    myY = Y;
+    myColor = COLOR;
+    myAngle = (Math.random()*361);
+    mySpeed = (int)(Math.random()*15)+10;
+    mySize = (int)(Math.random()*15+10);
+  }
+  void move() {
+    mySize += mySpeed;
+    mySize += mySpeed;
+  }
+  void show() {
+    fill(myColor);
+    noStroke();
+    ellipse((float)myX, (float)myY, mySize, mySize);
+  }
+}
+
 class Flower {  
   int myX, myY, mySpeed, mySize;  
   double myAngle;  
-  color myFill, myStroke;  
+  color myColor;  
   Flower() {    
-    myX = (int)(Math.random()*701);    
-    myY = (int)(Math.random()*701);    
+    myX = (int)(Math.random()*1001);    
+    myY = (int)(Math.random()*1001);    
     mySpeed = (int)(Math.random()*10)+5;    
     myAngle = (Math.random()*361);    
     mySize = 40;    
-    myFill = color(255, 192, 203);    
-    myStroke = color(255, 182, 193);
+    myColor = color(255, 192, 203);
   }  
-  Flower(int X, int Y, int SPEED, int SIZE, double ANGLE) {    
+  Flower(int X, int Y, int SPEED, int SIZE, double ANGLE, color COLOR) {    
     myX = X;    
     myY = Y;    
     mySpeed = SPEED;    
     myAngle = ANGLE;    
-    mySize = SIZE;    
-    myFill = color(255, 192, 203);    
-    myStroke = color(255, 182, 193);
-  }  
+    mySize = SIZE;
+    myColor = COLOR;
+  }
   void move() {    
     myX += mySpeed;    
     myY += mySpeed;    
     mySize += mySpeed;
   }  
   void show() {    
-    fill(myFill);    
-    stroke(myStroke);    
+    fill(myColor);    
+    stroke(myColor);    
     ellipse(myX, myY, mySize, mySize+10);
   }
 }
@@ -42,75 +260,14 @@ class Middle extends Flower {
     mySize = 0;    
     mySpeed = SPEED;    
     myAngle = ANGLE;    
-    myFill = color(255, 255, 51);    
-    myStroke = color(240, 230, 140);
+    myColor = color(255, 255, 51);
   }  
   void move() {     
     mySize += mySpeed;
   }  
   void show() {    
-    fill(myFill);    
-    stroke(myStroke);    
+    fill(myColor);    
+    stroke(myColor);    
     ellipse(0, 0, mySize, mySize);
   }
-}
-Flower[] flowers = new Flower[11];
-int continualrotate = 0;
-int reset = (int)(Math.random()*25+20);
-int resetcheck = 0;
-int xLoc = (int)(Math.random()*701);
-int yLoc = (int)(Math.random()*701);
-void setup() {  
-  size(700, 700);  
-  background(0, 255, 0);  
-  xLoc = (int)(Math.random()*701);  
-  yLoc = (int)(Math.random()*701);  
-  double angle = (Math.random()*361);  
-  int sizing = (int)(Math.random()*20)+20;  
-  flowers[0] = new Middle(0, 0, 7, angle);  
-  for (int i = 1; i < flowers.length; i++) {    
-    flowers[i] = new Flower(10, 10, 3, sizing, angle);
-  }  
-  xLoc = width/2;  
-  yLoc = height/2;  
-  frameRate(30);  
-  strokeWeight(3);
-}
-void draw() {  
-  fill(0, 255, 0, 30);  
-  rect(0, 0, 700, 700);  
-  //background(150);  
-  translate(xLoc, yLoc);  
-  rotate(radians(continualrotate));  
-  for (int i = 0; i < flowers.length; i++) {    
-    flowers[i].show();    
-    flowers[i].move();    
-    rotate(radians(36));
-  }  
-  continualrotate += 10;  
-  xLoc += Math.cos(flowers[0].myAngle)*flowers[0].mySpeed;  
-  yLoc += Math.sin(flowers[0].myAngle)*flowers[0].mySpeed;  
-  resetcheck++;  
-  if (resetcheck == reset || (flowers[1].myX >= 700-xLoc || flowers[1].myX <= xLoc-700 || flowers[1].myY >= 700-yLoc || flowers[1].myY <= yLoc-700)) {    
-    reset = (int)(Math.random()*25+20);    
-    resetcheck = 0;        
-    double angle = (Math.random()*361);    
-    int sizing = (int)(Math.random()*20)+20;    
-    flowers[0] = new Middle(0, 0, 7, angle);    
-    for (int i = 1; i < flowers.length; i++) {      
-      flowers[i] = new Flower(10, 10, 3, sizing, angle);
-    }    
-    xLoc = (int)(Math.random()*701);    
-    yLoc = (int)(Math.random()*701);
-  }
-}
-void mousePressed() {  
-  double angle = (Math.random()*361);  
-  int sizing = (int)(Math.random()*20)+20;  
-  flowers[0] = new Middle(0, 0, 7, angle);  
-  for (int i = 1; i < flowers.length; i++) {    
-    flowers[i] = new Flower(10, 10, 3, sizing, angle);
-  }  
-  xLoc = (int)(Math.random()*701);  
-  yLoc = (int)(Math.random()*701);
 }
