@@ -15,8 +15,9 @@ int continualrotate = 0;
 int xLoc = (int)(Math.random()*1001);
 int yLoc = (int)(Math.random()*1001);
 
+int trail = 10;
 color newcolor;
-color backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+color backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
 boolean uniformcolors = true;
 
 void setup() {  
@@ -38,7 +39,7 @@ void setup() {
 }
 
 void draw() {  
-  fill(backgroundcolor);  
+  fill(backgroundcolor, trail);  
   rect(0, 0, 1000, 1000);  
   //background(150);  
   if (todrawflowers){
@@ -131,13 +132,13 @@ void mousePressed() {
   } else if (mouseButton == CENTER) {
     uniformcolors = !uniformcolors;
   } else if (mouseButton == RIGHT) {
-    backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+    backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), trail);
   }
 }
 
 void keyPressed() {
   if (keyCode == 32) {
-    backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
+    backgroundcolor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), trail);
     todrawflowers = !todrawflowers;
     if (todrawflowers) {
       double angle = (Math.random()*361);  
@@ -169,6 +170,14 @@ void keyPressed() {
       thisColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256), 10);
       particles[0] = new OddballParticle(xLoc, yLoc, thisColor);
     }
+  } else if (keyCode == 38) {
+    trail++;
+    if (trail > 100)
+      trail = 100;
+  } else if (keyCode == 40){
+    trail--;
+    if (trail < 0)
+      trail = 0;
   }
 }
 
